@@ -1,18 +1,6 @@
 /* @flow */
 
-type GridType = {
-    x: number,
-    y: number,
-};
-
-type RobotType = {
-    position: {
-        x: number,
-        y: number,
-        orientation: string,
-    },
-    instructions: string,
-}
+import type { GridType, RobotType } from './types';
 
 const parseGrid = (grid: string): GridType => {
     const [rawX, rawY] = grid.split(' ');
@@ -28,7 +16,7 @@ const parseRobots = (robots: Array<string>): Array<RobotType> => {
 
     for (let i = 0; i < robots.length; i += 2) {
         const [rawX, rawY, orientation] = robots[i].split(' ');
-        const instructions = robots[i + 1];
+        const instructions = robots[i + 1].split('');
 
         const x = parseInt(rawX, 10);
         const y = parseInt(rawY, 10);

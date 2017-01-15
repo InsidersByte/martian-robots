@@ -1,14 +1,21 @@
 {
-  "parser": "babel-eslint",
-  "extends": ["airbnb-base", "plugin:flowtype/recommended"],
-  "plugins": ["flowtype"],
+    "parser": "babel-eslint",
+    "extends": ["airbnb-base", "plugin:flowtype/recommended"],
+    "plugins": ["flowtype"],
 
-  "env": {
-    "node": true,
-    "jest": true
-  },
+    "env": {
+        "node": true,
+        "jest": true
+    },
 
-  "rules": {
-    "indent": [2, 4, {"SwitchCase": 1}]
+    "rules": {
+        "indent": [2, 4, {"SwitchCase": 1}],
+        "max-len": [2, 160, 2],
+        "no-restricted-syntax": [
+            "error",
+            "ForInStatement",
+            "LabeledStatement",
+            "WithStatement"
+        ]
   }
 }
