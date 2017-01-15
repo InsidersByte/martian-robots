@@ -4,7 +4,7 @@
 import cli from 'cli';
 import fs from 'fs';
 import path from 'path';
-import instructionsParser from './util/instructionsParser';
+import instructionsParser from './instructionsParser';
 
 cli.enable('status');
 
