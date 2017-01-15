@@ -1,25 +1,32 @@
 /* @flow */
 
-import { GRID_ORIGIN_X, GRID_ORIGIN_Y } from './constants';
+import { GRID_ORIGIN_X, GRID_ORIGIN_Y, ORIENTATION_NORTH, ORIENTATION_EAST, ORIENTATION_SOUTH, ORIENTATION_WEST } from './constants';
 import type { GridType, RobotType, InstructionType, PositionType, OrientationType, FinalPositionType } from './types';
 
-const ORIENTATION_NORTH = 'N';
-const ORIENTATION_EAST = 'E';
-const ORIENTATION_SOUTH = 'S';
-const ORIENTATION_WEST = 'W';
+type NavigateRobotParamsType = {
+    grid: GridType,
+    robot: RobotType,
+    lostPositions: Array<string>,
+};
+
+type MoveParamsType = {
+    position: PositionType,
+    instruction: InstructionType,
+    lostPositions: Array<string>,
+};
 
 const turnLeft = (position: PositionType): OrientationType => {
     const { orientation } = position;
 
     switch (orientation) {
         case ORIENTATION_NORTH:
-            return ORIENTATION_EAST;
-        case ORIENTATION_EAST:
-            return ORIENTATION_SOUTH;
-        case ORIENTATION_SOUTH:
             return ORIENTATION_WEST;
-        case ORIENTATION_WEST:
+        case ORIENTATION_EAST:
             return ORIENTATION_NORTH;
+        case ORIENTATION_SOUTH:
+            return ORIENTATION_EAST;
+        case ORIENTATION_WEST:
+            return ORIENTATION_SOUTH;
         default:
             throw new Error(`Orientation '${orientation} is not supported`);
     }
@@ -42,8 +49,12 @@ const turnRight = (position: PositionType): OrientationType => {
     }
 };
 
-const moveForward = (position: PositionType) => {
+const moveForward = (position: PositionType, lostPositions: Array<string>) => {
     const { x, y, orientation } = position;
+
+    if (lostPositions.includes(`${x}${y}${orientation}`)) {
+        return position;
+    }
 
     switch (orientation) {
         case ORIENTATION_NORTH:
@@ -59,14 +70,14 @@ const moveForward = (position: PositionType) => {
     }
 };
 
-const move = ({ position, instruction }: { position: PositionType, instruction: InstructionType }): PositionType => {
+const move = ({ position, instruction, lostPositions }: MoveParamsType): PositionType => {
     switch (instruction) {
         case 'L':
             return Object.assign({}, position, { orientation: turnLeft(position) });
         case 'R':
             return Object.assign({}, position, { orientation: turnRight(position) });
         case 'F':
-            return Object.assign({}, position, moveForward(position));
+            return Object.assign({}, position, moveForward(position, lostPositions));
         default:
             throw new Error(`Instruction '${instruction}' is not supported`);
     }
@@ -92,14 +103,14 @@ const isLost = ({ x, y, position }: { x: number, y: number, position: PositionTy
     return false;
 };
 
-const navigateRobot = ({ grid, robot }: { grid: GridType, robot: RobotType }): FinalPositionType => {
+const navigateRobot = ({ grid, robot, lostPositions }: NavigateRobotParamsType): FinalPositionType => {
     const { x, y } = grid;
     const { position, instructions } = robot;
 
     let finalPosition = Object.assign({}, position);
 
     for (const instruction of instructions) {
-        const updatedPosition = move({ position: finalPosition, instruction });
+        const updatedPosition = move({ position: finalPosition, instruction, lostPositions });
         const lost = isLost({ x, y, position: updatedPosition });
 
         if (lost) {
