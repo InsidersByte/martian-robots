@@ -4,7 +4,7 @@
 import cli from 'cli';
 import fs from 'fs';
 import path from 'path';
-import instructionsParser from './instructionsParser';
+import navigator from './navigator';
 
 cli.enable('status');
 
@@ -19,7 +19,11 @@ cli.main((args) => {
 
     const [fileName] = args;
     const filePath = path.join(currentPath, fileName);
-    const file = fs.readFileSync(filePath, 'utf8');
+    const instructions = fs.readFileSync(filePath, 'utf8');
 
-    instructionsParser(file);
+    const robots = navigator(instructions);
+
+    for (const { x, y, orientation } of robots) {
+        console.log(`${x} ${y} ${orientation}`);
+    }
 });
