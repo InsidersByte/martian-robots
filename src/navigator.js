@@ -2,11 +2,12 @@
 
 import instructionsParser from './instructionsParser';
 import robotNavigator from './robotNavigator';
+import type { FinalPositionType } from './types';
 
-const navigate = (instructions: string) => {
-    const { robots } = instructionsParser(instructions);
+const navigate = (instructions: string): Array<FinalPositionType> => {
+    const { grid, robots } = instructionsParser(instructions);
 
-    return robots.map(robot => robotNavigator({ robot }));
+    return robots.map(robot => robotNavigator({ grid, robot }));
 };
 
 export default navigate;

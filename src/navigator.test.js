@@ -1,10 +1,19 @@
 import navigator from './navigator';
 
 describe('navigator', () => {
-    it('should parse the instructions return the robot final positions', () => {
+    it('should parse the instructions and return the robot final positions', () => {
         expect(navigator(`5 3
 1 1 E
-FF`))
-            .toEqual([{ x: 3, y: 1, orientation: 'E' }]);
+RFRFRFRF`))
+            .toEqual([{ x: 1, y: 1, orientation: 'E' }]);
+    });
+
+    it('should return lost robots', () => {
+        expect(navigator(`5 3
+1 1 E
+RFRFRFRF
+3 2 N
+FRRFLLFFRRFLL`))
+            .toEqual([{ x: 1, y: 1, orientation: 'E' }, { x: 3, y: 3, orientation: 'N', lost: true }]);
     });
 });

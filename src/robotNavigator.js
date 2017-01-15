@@ -1,6 +1,7 @@
 /* @flow */
 
-import type { RobotType, InstructionType, PositionType, OrientationType } from './types';
+import { GRID_ORIGIN_X, GRID_ORIGIN_Y } from './constants';
+import type { GridType, RobotType, InstructionType, PositionType, OrientationType, FinalPositionType } from './types';
 
 const ORIENTATION_NORTH = 'N';
 const ORIENTATION_EAST = 'E';
@@ -71,13 +72,41 @@ const move = ({ position, instruction }: { position: PositionType, instruction: 
     }
 };
 
-const navigateRobot = ({ robot }: { robot: RobotType }): PositionType => {
+const isLost = ({ x, y, position }: { x: number, y: number, position: PositionType }): boolean => {
+    if (position.x < GRID_ORIGIN_X) {
+        return true;
+    }
+
+    if (position.x > x) {
+        return true;
+    }
+
+    if (position.y < GRID_ORIGIN_Y) {
+        return true;
+    }
+
+    if (position.y > y) {
+        return true;
+    }
+
+    return false;
+};
+
+const navigateRobot = ({ grid, robot }: { grid: GridType, robot: RobotType }): FinalPositionType => {
+    const { x, y } = grid;
     const { position, instructions } = robot;
 
     let finalPosition = Object.assign({}, position);
 
     for (const instruction of instructions) {
-        finalPosition = move({ position: finalPosition, instruction });
+        const updatedPosition = move({ position: finalPosition, instruction });
+        const lost = isLost({ x, y, position: updatedPosition });
+
+        if (lost) {
+            return Object.assign({}, finalPosition, { lost });
+        }
+
+        finalPosition = updatedPosition;
     }
 
     return finalPosition;

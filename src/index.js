@@ -23,7 +23,7 @@ cli.main((args) => {
 
     const robots = navigator(instructions);
 
-    for (const { x, y, orientation } of robots) {
-        console.log(`${x} ${y} ${orientation}`);
+    for (const { x, y, orientation, lost } of robots) {
+        console.log(`${x} ${y} ${orientation} ${lost ? 'LOST' : ''}`);
     }
 });

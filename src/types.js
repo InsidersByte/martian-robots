@@ -19,3 +19,10 @@ export type RobotType = {
     position: PositionType,
     instructions: Array<InstructionType>,
 }
+
+export type FinalPositionType = {
+    x: number,
+    y: number,
+    orientation: OrientationType,
+    lost?: boolean,
+};
