@@ -28,7 +28,7 @@ const turnLeft = (position: PositionType): OrientationType => {
         case ORIENTATION_WEST:
             return ORIENTATION_SOUTH;
         default:
-            throw new Error(`Orientation '${orientation} is not supported`);
+            throw new Error(`Orientation '${orientation}' is not supported`);
     }
 };
 
@@ -45,7 +45,7 @@ const turnRight = (position: PositionType): OrientationType => {
         case ORIENTATION_WEST:
             return ORIENTATION_NORTH;
         default:
-            throw new Error(`Orientation '${orientation} is not supported`);
+            throw new Error(`Orientation '${orientation}' is not supported`);
     }
 };
 
@@ -66,7 +66,7 @@ const moveForward = (position: PositionType, lostPositions: Array<string>) => {
         case ORIENTATION_WEST:
             return { x: x - 1, y };
         default:
-            throw new Error(`Orientation '${orientation} is not supported`);
+            throw new Error(`Orientation '${orientation}' is not supported`);
     }
 };
 
